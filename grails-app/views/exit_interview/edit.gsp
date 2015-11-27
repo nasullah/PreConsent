@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit exit interview record for ${exit_interviewInstance?.person?.forenames} ${exit_interviewInstance?.person?.surname}</title>
+	<resource:autoComplete/>
 </head>
 
 <body>

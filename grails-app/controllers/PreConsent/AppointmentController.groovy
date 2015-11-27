@@ -35,18 +35,6 @@ class AppointmentController {
         respond new Appointment(params)
     }
 
-    def findClinician() {
-        def searchClinician= params.searchClinician
-
-        def listClinician = Clinician.where{
-            forenames =~ searchClinician || surname =~ searchClinician || department =~ searchClinician
-        }.findAll()
-
-        if (!listClinician.empty){
-            render(template: "clinician",  model: [listClinician: listClinician])
-        }
-    }
-
     def eventList (){
         def appointmentList = Appointment.list()
         def eventList = []

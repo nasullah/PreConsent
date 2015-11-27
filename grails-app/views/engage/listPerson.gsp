@@ -42,7 +42,7 @@
 
                 <td>${fieldValue(bean: personInstance, field: "disease")}</td>
 
-                <td><a class='btn btn-primary btn-xs' <g:link controller="engage" action="create" params="['person.id': personInstance?.id]"><i class="glyphicon glyphicon-plus"></i> Engage this patient</g:link></td>
+                <td><a class='btn btn-primary btn-xs' <g:link controller="engage" action="create" params="['person': personInstance?.id]"><i class="glyphicon glyphicon-plus"></i> Engage this patient</g:link></td>
 
             </tr>
         </g:each>

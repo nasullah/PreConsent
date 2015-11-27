@@ -3,70 +3,33 @@
 
 
 
-
-            <g:if test="${!clinical_withdrawalInstance?.person?.id}">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <label for="person" class="control-label"><g:message code="approach.person.label" default="Find Person" /><span class="required-indicator">*</span></label>
-                        <div class="input-group">
-                            <g:textField type="text" id="searchPerson" name="searchPerson" class="form-control"  placeholder="Enter person's surname or Family Identifier or NHS or MRN number" required="" ></g:textField>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success" value="Find" onClick= 'getPerson()'><span class="glyphicon glyphicon-search"></span> Find</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div id="selectPerson"></div>
-                    </div>
-                </div>
-            </g:if>
-
-            <g:if test="${clinical_withdrawalInstance?.person?.id}">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <label for="person" class="control-label"><g:message code="approach.person.label" default="Person" /><span class="required-indicator">*</span></label>
-                        <div class="${hasErrors(bean: clinical_withdrawalInstance, field: 'person', 'error')} required">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="person" class="control-label"><g:message code="clinical_withdrawal.person.label" default="Person (enter surname or family identifier or NHS or MRN number)" /><span class="required-indicator">*</span></label>
+                    <div class="${hasErrors(bean: clinical_withdrawalInstance, field: 'person', 'error')} required">
+                        <g:if test="${clinical_withdrawalInstance?.person?.id}">
                             <div>
                                 <g:select class="form-control" id="person" name="person" size="1" from="${PreConsent.Person.list()}" optionKey="id" required="" value="${clinical_withdrawalInstance?.person?.id}" />
                                 <span class="help-inline">${hasErrors(bean: clinical_withdrawalInstance, field: 'person', 'error')}</span>
                             </div>
+                        </g:if>
+                        <g:else>
+                            <richui:autoComplete class="form-control"  name="personName" action="${createLinkTo('dir': 'person/findPerson')}" value="${clinical_withdrawalInstance?.person}" onItemSelect="callPerson(id)"  />
+                            <g:hiddenField id ="person" name ="person" value="${clinical_withdrawalInstance?.person?.id}"/>
+                        </g:else>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <label for="clinician" class="control-label"><g:message code="clinical_withdrawal.clinician.label" default="Clinician (enter forenames or surname or department)" /><span class="required-indicator">*</span></label>
+                    <div class="${hasErrors(bean: clinical_withdrawalInstance, field: 'clinician', 'error')} required">
+                        <div>
+                            <richui:autoComplete class="form-control"  name="clinicianName" action="${createLinkTo('dir': 'clinician/findClinician')}" value="${clinical_withdrawalInstance?.clinician}" onItemSelect="callClinician(id)"  />
+                            <g:hiddenField id ="clinician" name ="clinician" value="${clinical_withdrawalInstance?.clinician?.id}"/>
                         </div>
                     </div>
                 </div>
-            </g:if>
-
-            <g:if test="${!clinical_withdrawalInstance?.clinician?.id}">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <label for="person" class="control-label"><g:message code="approach.clinician.label" default="Find Clinician" /><span class="required-indicator">*</span></label>
-                        <div class="input-group">
-                            <g:textField type="text" id="searchClinician" name="searchClinician" class="form-control"  placeholder="Enter clinician's surname or forenames or department" required="" ></g:textField>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success" value="Find" onClick= 'getClinician()'><span class="glyphicon glyphicon-search"></span> Find</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div id="selectClinician"></div>
-                    </div>
-                </div>
-            </g:if>
-
-            <g:if test="${clinical_withdrawalInstance?.clinician?.id}">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <label for="clinician" class="control-label"><g:message code="approach.clinician.label" default="Clinician" /><span class="required-indicator">*</span></label>
-                        <div class="${hasErrors(bean: clinical_withdrawalInstance, field: 'clinician', 'error')} required">
-                            <div>
-                                <g:select class="form-control" id="clinician" name="clinician.id" size="1" from="${PreConsent.Clinician.list()}" optionKey="id" required="" value="${clinical_withdrawalInstance?.clinician?.id}"/>
-                                <span class="help-inline">${hasErrors(bean: clinical_withdrawalInstance, field: 'clinician', 'error')}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </g:if>
+            </div>
 
             <div class="row">
                 <div class="col-lg-6">
@@ -110,72 +73,14 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="clinicianNotFound">
-                <div class="modal-dialog" style="position: absolute; left: 0%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title">Not Found!</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>No clinician found! </p>
-                        </div>
-                        <div class="modal-footer">
-                            <a class='btn btn-primary btn-small' <g:link controller="clinician" action="create" ><i class="glyphicon glyphicon-plus"></i> ${message(code: 'default.add.label', args: [message(code: 'clinician.label', default: 'Clinician')])}</g:link>
-                            <button type="button" class="btn" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="personNotFound">
-                <div class="modal-dialog" style="position: absolute; left: 0%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title">Not Found!</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>No clinician found! </p>
-                        </div>
-                        <div class="modal-footer">
-                            <a class='btn btn-primary btn-small' <g:link controller="clinician" action="create" ><i class="glyphicon glyphicon-plus"></i> ${message(code: 'default.add.label', args: [message(code: 'clinician.label', default: 'Clinician')])}</g:link>
-                            <button type="button" class="btn" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
 <g:javascript plugin="jquery" library="jquery" />
 <script>
-    function getClinician(){
-        ${remoteFunction (controller: 'clinical_withdrawal',
-                        action: 'findClinician',
-                        params: '"searchClinician=" + $("#searchClinician").val()',
-                        update: 'selectClinician',
-                        onFailure:'clinicianError()'
-                )}
+    function callPerson(person){
+        document.getElementById('person').value = person;
     }
 
-    function clinicianError(){
-        var select = $("#selectClinician");
-        select.empty().append("Clinician not found");
-        $('#clinicianNotFound').modal()
-    }
-
-    function getPerson(){
-        ${remoteFunction (controller: 'clinical_withdrawal',
-                        action: 'findPerson',
-                        params: '"searchPerson=" + $("#searchPerson").val()',
-                        update: 'selectPerson',
-                        onFailure:'personError()'
-                )}
-    }
-
-    function personError(){
-        var select = $("#selectPerson");
-        select.empty().append("Person not found");
-        $('#personNotFound').modal()
+    function callClinician(clinician){
+        document.getElementById('clinician').value = clinician;
     }
 </script>
 

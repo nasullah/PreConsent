@@ -50,14 +50,25 @@ class PersonController {
         respond new Person(params)
     }
 
-    def findPerson() {
-        def searchPerson= params.searchPerson
-        def listPerson = Person.where{
-            nhsNumber == searchPerson || mrnNumber == searchPerson || surname == searchPerson || familyIdentifier == searchPerson
-        }.findAll()
-
-        if (!listPerson.empty){
-            render(template: "person",  model: [listPerson: listPerson])
+    def findPerson(){
+        def listPerson = Person.createCriteria().listDistinct{
+            or{
+                ilike("nhsNumber", "%${params.query}%")
+                ilike("mrnNumber", "%${params.query}%")
+                ilike("surname", "%${params.query}%")
+                ilike("familyIdentifier", "%${params.query}%")
+            }
+        }
+        render(contentType: "text/xml") {
+            results() {
+                listPerson.each { person ->
+                    result(){
+                        name(person)
+                        //Optional id which will be available in onItemSelect
+                        id(person.id)
+                    }
+                }
+            }
         }
     }
 

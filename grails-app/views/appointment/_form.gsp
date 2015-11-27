@@ -14,6 +14,16 @@
 				</div>
 
 				<div class="col-lg-6">
+					<label for="clinician" class="control-label"><g:message code="appointment.clinician.label" default="Clinician (enter forenames or surname or department)" /><span class="required-indicator">*</span></label>
+					<div class="${hasErrors(bean: appointmentInstance, field: 'clinician', 'error')} required">
+						<div>
+							<richui:autoComplete class="form-control"  name="clinicianName" action="${createLinkTo('dir': 'clinician/findClinician')}" value="${appointmentInstance?.clinician}" onItemSelect="callClinician(id)"  />
+							<g:hiddenField id ="clinician" name ="clinician" value="${appointmentInstance?.clinician?.id}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6">
 					<label for="person" class="control-label"> Add Other Family Members </label>
 					<div>
 						<button type="button" class="btn btn" value="Find" onClick= 'getFamilyMembers()'><span class="glyphicon glyphicon-plus"></span> Add</button>
@@ -22,39 +32,6 @@
 			</div>
 
 			<div id="selectPerson"></div>
-
-
-			<g:if test="${!appointmentInstance?.clinician?.id}">
-				<div class="row">
-					<div class="col-lg-6">
-						<label for="clinician" class="control-label"><g:message code="appointment.clinician.label" default="Find Clinician" /><span class="required-indicator">*</span></label>
-						<div class="input-group">
-							<g:textField type="text" id="searchClinician" name="searchClinician" class="form-control"  placeholder="Enter clinician's surname or forenames or department" required="" />
-							<div class="input-group-btn">
-								<button type="button" class="btn btn-success" value="Find" onClick= 'getClinician()'><span class="glyphicon glyphicon-search"></span> Find</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div id="selectClinician"></div>
-					</div>
-				</div>
-			</g:if>
-
-			<g:if test="${appointmentInstance?.clinician?.id}">
-				<div class="row">
-					<div class="col-lg-6">
-						<label for="clinician" class="control-label"><g:message code="appointment.clinician.label" default="Clinician" /><span class="required-indicator">*</span></label>
-						<div class="${hasErrors(bean: appointmentInstance, field: 'clinician', 'error')} required">
-							<div>
-								<g:select class="form-control" id="clinician" name="clinician.id" size="1" from="${PreConsent.Clinician.list()}" optionKey="id" required="" value="${appointmentInstance?.clinician?.id}"  />
-								<span class="help-inline">${hasErrors(bean: appointmentInstance, field: 'clinician', 'error')}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</g:if>
 
 			<div class="row">
 				<div class="col-lg-6">
@@ -157,21 +134,6 @@
 		if (selectedDate > today){
 			$('#createAppointment').modal()
 		}
-
-	}
-	function getClinician(){
-		${remoteFunction (controller: 'engage',
-                        action: 'findClinician',
-                        params: '"searchClinician=" + $("#searchClinician").val()',
-                        update: 'selectClinician',
-                        onFailure:'clinicianError()'
-                )}
-	}
-
-	function clinicianError(){
-		var select = $("#selectClinician");
-		select.empty().append("Clinician not found");
-		$('#clinicianNotFound').modal()
 	}
 
 	function getFamilyMembers(){
@@ -186,5 +148,9 @@
 	function error(){
 		var select = $("#selectPerson");
 		select.empty().append("Not found");
+	}
+
+	function callClinician(clinician){
+		document.getElementById('clinician').value = clinician;
 	}
 </script>

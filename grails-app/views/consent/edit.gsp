@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit consent record for ${consentInstance?.person?.forenames} ${consentInstance?.person?.surname}</title>
+	<resource:autoComplete/>
 </head>
 
 <body>

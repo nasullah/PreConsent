@@ -41,6 +41,10 @@
                 </li>
 
                 <li>
+                    <g:link controller="exit_interview" action="index">Exit Interview</g:link>
+                </li>
+
+                <li>
                     <g:link controller="patient_withdraw" action="listPersonsToBeWithdrawn">Record patient withdrawal</g:link>
                 </li>
 

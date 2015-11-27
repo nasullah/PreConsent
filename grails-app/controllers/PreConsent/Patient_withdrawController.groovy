@@ -48,36 +48,6 @@ class Patient_withdrawController {
         respond new Patient_withdraw(params)
     }
 
-    def findClinician() {
-        def searchClinician= params.searchClinician
-
-        def listClinician = Clinician.where{
-            forenames =~ searchClinician || surname =~ searchClinician || department =~ searchClinician
-        }.findAll()
-        if (!listClinician.empty){
-            render(template: "clinician",  model: [listClinician: listClinician])
-        }
-    }
-
-    def findPerson() {
-        def searchPerson= params.searchPerson
-
-        def getPerson = Person.createCriteria().get{
-            or{
-                eq('nhsNumber', searchPerson, [ignoreCase: true])
-                eq('mrnNumber', searchPerson, [ignoreCase: true])
-                eq('surname', searchPerson, [ignoreCase: true])
-                eq('familyIdentifier', searchPerson, [ignoreCase: true])
-            }
-        }
-
-        def isConsented = Consent.findByPerson(getPerson)
-        def isPatient_withdrawal= Patient_withdraw.findByPerson(getPerson)
-        if (isConsented && !isPatient_withdrawal){
-            render(template: "person",  model: [getPerson: getPerson])
-        }
-    }
-
     def listPersonsToBeWithdrawn() {
         List<Long> withdrawalList = Patient_withdraw.list().id
         List<Person> person = new ArrayList<Person>()

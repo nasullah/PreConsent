@@ -48,18 +48,24 @@ class ClinicianController {
         respond new Clinician(params)
     }
 
-    def findPerson() {
-        def searchPerson= params.searchPerson
-
-        def listPerson = Person.where{
-            nhsNumber == searchPerson || mrnNumber == searchPerson || surname == searchPerson || familyIdentifier == searchPerson
-        }.findAll()
-
-        listPerson = listPerson.findAll {p ->
-            Consent.list().every {r -> r.person.id == p.id}}
-
-        if (!listPerson.empty){
-            render(template: "person",  model: [listPerson: listPerson])
+    def findClinician() {
+        def listClinician = Clinician.createCriteria().listDistinct{
+            or{
+                ilike("forenames", "%${params.query}%")
+                ilike("surname", "%${params.query}%")
+                ilike("department", "%${params.query}%")
+            }
+        }
+        render(contentType: "text/xml") {
+            results() {
+                listClinician.each { clinician ->
+                    result(){
+                        name(clinician)
+                        //Optional id which will be available in onItemSelect
+                        id(clinician.id)
+                    }
+                }
+            }
         }
     }
 

@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit patient withdrawal record for ${patient_withdrawInstance?.person?.forenames} ${patient_withdrawInstance?.person?.surname}</title>
+	<resource:autoComplete/>
 </head>
 
 <body>

@@ -15,10 +15,10 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <label for="clinician" class="control-label"><g:message code="approach.clinician.label" default="Clinician" /><span class="required-indicator">*</span></label>
+                    <label for="clinician" class="control-label"><g:message code="approach.clinician.label" default="Clinician (enter forenames or surname or department)" /><span class="required-indicator">*</span></label>
                     <div class="${hasErrors(bean: engageInstance, field: 'clinician', 'error')} required">
                         <div>
-                            <richui:autoComplete class="form-control"  name="clinicianName" action="${createLinkTo('dir': 'engage/findClinician')}" value="${engageInstance?.clinician}" onItemSelect="callClinician(id)"  />
+                            <richui:autoComplete class="form-control"  name="clinicianName" action="${createLinkTo('dir': 'clinician/findClinician')}" value="${engageInstance?.clinician}" onItemSelect="callClinician(id)"  />
                             <g:hiddenField id ="clinician" name ="clinician" value="${engageInstance?.clinician?.id}"/>
                         </div>
                     </div>
@@ -52,24 +52,6 @@
                         <div>
                             <g:textArea class="form-control" name="notes" cols="40" rows="5" value="${engageInstance?.notes}"/>
                             <span class="help-inline">${hasErrors(bean: engageInstance, field: 'notes', 'error')}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="personNotFound">
-                <div class="modal-dialog" style="position: absolute; left: 0%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title">Not Found!</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>No clinician found! </p>
-                        </div>
-                        <div class="modal-footer">
-                            <a class='btn btn-primary btn-small' <g:link controller="clinician" action="create" ><i class="glyphicon glyphicon-plus"></i> ${message(code: 'default.add.label', args: [message(code: 'clinician.label', default: 'Clinician')])}</g:link>
-                            <button type="button" class="btn" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

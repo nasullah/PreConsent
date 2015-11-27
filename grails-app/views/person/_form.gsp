@@ -108,17 +108,17 @@
         <div class="input-group">
             <g:textField class="form-control" id="familyIdentifier" name="familyIdentifier" value="${personInstance?.familyIdentifier}" placeholder="Click the button or enter Family Identifier" ></g:textField>
             <div class="input-group-btn" id="generateButtonId">
-                <button type="button" class="btn btn-success" value="Find" onClick= 'generateIdentifier()'><span class="glyphicon glyphicon-plus"></span> Generate Family Identifier</button>
+                <button type="button" class="btn btn-success" value="" onClick= 'generateIdentifier()'><span class="glyphicon glyphicon-plus"></span> Generate Family Identifier</button>
             </div>
         </div>
     </div>
 
     <div class="col-lg-6" id="searchPersonId">
-        <label for="person" class="control-label"><g:message code="approach.person.label" default="Find Family Identifier" /><span class="required-indicator">*</span></label>
-        <div class="input-group">
-            <g:textField type="text" id="searchPerson" name="searchPerson" class="form-control"  placeholder="Enter person's surname or Family Identifier or NHS or MRN number" ></g:textField>
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-success" value="Find" onClick= 'getPerson()'><span class="glyphicon glyphicon-search"></span> Find</button>
+        <label>Find Family Identifier (enter surname or family identifier or NHS or MRN number)<span class="required-indicator">*</span></label>
+        <div>
+            <div>
+                <richui:autoComplete class="form-control" id="personName"  name="personName" action="${createLinkTo('dir': 'person/findPerson')}" value="" onItemSelect="callPerson(id)"/>
+                <g:hiddenField id ="selectedPerson" name ="selectedPerson" value=""/>
             </div>
         </div>
     </div>
@@ -134,12 +134,6 @@
             </div>
         </div>
     </g:if>
-
-    <div class="col-lg-6" id="selectPersonId">
-        <p>
-        <p>
-        <div id="selectPerson"></div>
-    </div>
 </div>
 
 <g:javascript plugin="jquery" library="jquery" />
@@ -153,7 +147,7 @@
     function hideButtonFamilyId(){
         $('#familyIdentifierId').hide();
         $('#searchPersonId').show();
-        $('#selectPersonId').show();
+        $('#personName').val('');
     }
 
     $('#searchPersonId').hide();
@@ -166,7 +160,6 @@
 
     function hideList(){
         $('#searchPersonId').hide();
-        $('#selectPersonId').hide();
         $('#generateButtonId').hide();
         $('#familyIdentifierId').show();
     }
@@ -200,20 +193,10 @@
         }
     }
 
-    function getPerson(){
-        ${remoteFunction (controller: 'person',
-                        action: 'findPerson',
-                        params: '"searchPerson=" + $("#searchPerson").val()',
-                        update: 'selectPerson',
-                        onFailure:'personError()'
-                )}
-    }
-
     function getFamilyId(){
-
         var baseUrl = "${createLink(controller:'person', action:'findFamilyId')}";
-        var selectPerson = $("#person").val();
-        var url = baseUrl + "?personId="+selectPerson;
+        var selectedPerson = $("#selectedPerson").val();
+        var url = baseUrl + "?personId="+selectedPerson;
         $.ajax({
             url:url,
             type: 'POST',
@@ -234,10 +217,9 @@
         });
     }
 
-    function personError(){
-        var select = $("#selectPerson");
-        select.empty().append("Person not found");
-        $('#personNotFound').modal()
+    function callPerson(selectedPerson){
+        document.getElementById('selectedPerson').value = selectedPerson;
+        getFamilyId()
     }
 </script>
 

@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit participant record for ${personInstance?.forenames} ${personInstance?.surname}</title>
+	<resource:autoComplete/>
 </head>
 
 <body>

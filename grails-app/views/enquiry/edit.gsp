@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit enquiry record for ${enquiryInstance?.person?.forenames} ${enquiryInstance?.person?.surname}</title>
+	<resource:autoComplete/>
 </head>
 
 <body>

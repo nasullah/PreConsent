@@ -6,6 +6,7 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'person.label', default: 'Person')}" />
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
+	<resource:autoComplete/>
 </head>
 
 <body>

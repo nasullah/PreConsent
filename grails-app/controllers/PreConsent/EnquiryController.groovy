@@ -48,28 +48,6 @@ class EnquiryController {
         respond new Enquiry(params)
     }
 
-    def findClinician() {
-        def searchClinician= params.searchClinician
-
-        def listClinician = Clinician.where{
-            forenames =~ searchClinician || surname =~ searchClinician || department =~ searchClinician
-        }.findAll()
-        if (!listClinician.empty){
-            render(template: "clinician",  model: [listClinician: listClinician])
-        }
-    }
-
-    def findPerson() {
-        def searchPerson= params.searchPerson
-
-        def listPerson = Person.where{
-            nhsNumber =~ searchPerson || mrnNumber =~ searchPerson || surname =~ searchPerson || familyIdentifier =~ searchPerson
-        }.findAll()
-        if (!listPerson.empty){
-            render(template: "person",  model: [listPerson: listPerson])
-        }
-    }
-
     @Transactional
     def save(Enquiry enquiryInstance) {
         if (enquiryInstance == null) {

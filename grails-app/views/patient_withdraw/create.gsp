@@ -6,6 +6,7 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'patient_withdraw.label', default: 'Patient Withdraw')}" />
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
+	<resource:autoComplete/>
 </head>
 
 <body>

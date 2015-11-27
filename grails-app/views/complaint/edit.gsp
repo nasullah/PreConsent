@@ -5,6 +5,7 @@
 <head>
 	<meta name="layout" content="kickstart" />
     <title>Edit complaint record for ${complaintInstance?.person?.forenames} ${complaintInstance?.person?.surname}</title>
+	<resource:autoComplete/>
 
 </head>
 

@@ -42,7 +42,7 @@
 
                 <td>${fieldValue(bean: engageInstance, field: "mode")}</td>
 
-                <td><a class='btn btn-primary btn-xs' <g:link controller="clinical_withdrawal" action="create" params="['person.id': engageInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Withdraw this patient for clinical reasons</g:link></td>
+                <td><a class='btn btn-primary btn-xs' <g:link controller="clinical_withdrawal" action="create" params="['person': engageInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Withdraw this patient for clinical reasons</g:link></td>
 
             </tr>
         </g:each>

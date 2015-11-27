@@ -47,36 +47,6 @@ class Clinical_withdrawalController {
         respond new Clinical_withdrawal(params)
     }
 
-    def findClinician() {
-        def searchClinician= params.searchClinician
-
-        def listClinician = Clinician.where{
-            forenames =~ searchClinician || surname =~ searchClinician || department =~ searchClinician
-        }.findAll()
-        if (!listClinician.empty){
-            render(template: "clinician",  model: [listClinician: listClinician])
-        }
-    }
-
-    def findPerson() {
-        def searchPerson= params.searchPerson
-
-        def getPerson = Person.createCriteria().get{
-            or{
-                eq('nhsNumber', searchPerson, [ignoreCase: true])
-                eq('mrnNumber', searchPerson, [ignoreCase: true])
-                eq('surname', searchPerson, [ignoreCase: true])
-                eq('familyIdentifier', searchPerson, [ignoreCase: true])
-            }
-        }
-
-        def isEngaged = Engage.findByPerson(getPerson)
-        def isClinical_withdrawal= Clinical_withdrawal.findByPerson(getPerson)
-        if (isEngaged && !isClinical_withdrawal){
-            render(template: "person",  model: [getPerson: getPerson])
-        }
-    }
-
     def listPersonsToBeClinicalWithdrawn() {
 
         List<Long> consentList = Consent.list().id

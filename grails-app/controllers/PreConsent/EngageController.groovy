@@ -69,27 +69,6 @@ class EngageController {
         respond new Engage(params)
     }
 
-    def findClinician() {
-        def listClinician = Clinician.createCriteria().listDistinct{
-            or{
-                ilike("forenames", "%${params.query}%")
-                ilike("surname", "%${params.query}%")
-                ilike("department", "%${params.query}%")
-            }
-        }
-        render(contentType: "text/xml") {
-            results() {
-                listClinician.each { clinician ->
-                    result(){
-                        name(clinician)
-                        //Optional id which will be available in onItemSelect
-                        id(clinician.id)
-                    }
-                }
-            }
-        }
-    }
-
     def createAppointment() {
 
         def builder = new ICalendarBuilder()
