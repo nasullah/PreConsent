@@ -50,19 +50,20 @@ class ConsentController {
         List<Long> consentList = Consent.list().id
         List<Long> clinicalWithdrawalList = Clinical_withdrawal.list().id
         clinicalWithdrawalList.addAll(consentList)
-        List<Person> person = new ArrayList<Person>()
+        List<Person> persons = new ArrayList<Person>()
         if (!clinicalWithdrawalList.empty){
-            person = Person.createCriteria().list {
+            persons = Person.createCriteria().list {
                 interactions {
                     'in'("id",clinicalWithdrawalList)
                 }
             }
         }
-        def personsToBeConsentedList = Engage.list()
-        if (!person.empty) {
-            personsToBeConsentedList = Engage.findAllByPersonNotInList(person)
+        if (!persons.empty){
+            def personsToBeConsentedList = Engage.createCriteria().list { not {person {'in'("id",persons.id)}}}
+            [personsToBeConsentedList: personsToBeConsentedList, personsToBeConsentedTotal: personsToBeConsentedList.size()]
+        }else {
+            [personsToBeConsentedList: Engage.list(), personsToBeConsentedTotal: Engage.count()]
         }
-        [personsToBeConsentedList: personsToBeConsentedList, personsToBeConsentedTotal: personsToBeConsentedList.size()]
     }
 
     def filter = {

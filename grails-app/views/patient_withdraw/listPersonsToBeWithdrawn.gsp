@@ -42,7 +42,7 @@
 
                 <td>${fieldValue(bean: consentInstance, field: "mode")}</td>
 
-                <td><a class='btn btn-primary btn-xs' <g:link controller="patient_withdraw" action="create" params="['person.id': consentInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s withdrawal</g:link></td>
+                <td><a class='btn btn-primary btn-xs' <g:link controller="patient_withdraw" action="create" params="['person': consentInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s withdrawal</g:link></td>
 
             </tr>
         </g:each>

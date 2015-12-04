@@ -1,5 +1,5 @@
 
-<%@ page import="PreConsent.Person" %>
+<%@ page import="PreConsent.Appointment; PreConsent.Person" %>
 <%@ page import="PreConsent.Clinical_withdrawal" %>
 <%@ page import="PreConsent.Complaint" %>
 <%@ page import="PreConsent.Consent" %>
@@ -155,7 +155,7 @@
                         <% def enquiry = Enquiry.listOrderById() %>
                         <% def exit_interview = Exit_interview.listOrderById() %>
                         <% def patient_withdraw = Patient_withdraw.listOrderById() %>
-
+                        <% def appointment = Appointment.listOrderById() %>
                         <ul>
 
                             <g:each in="${complaint}" var="item">
@@ -210,6 +210,14 @@
                                 <g:each in="${personInstance.interactions}" var="pos">
                                     <g:if test="${pos.id ==item.id}">
                                         <li><g:link controller="engage" action="show" id="${item.id}">${item}</g:link></li>
+                                    </g:if>
+                                </g:each>
+                            </g:each>
+
+                            <g:each in="${appointment}" var="item">
+                                <g:each in="${personInstance.interactions}" var="pos">
+                                    <g:if test="${pos.id ==item.id}">
+                                        <li><g:link controller="appointment" action="show" id="${item.id}">${item}</g:link></li>
                                     </g:if>
                                 </g:each>
                             </g:each>

@@ -86,7 +86,7 @@
 
 <p class="text-primary">Available Action</p>
 
-<g:if test="${PreConsent.Patient_withdraw.list().person.findAll{it.findAll {it == consentInstance?.person}}.empty }">
+<g:if test="${PreConsent.Patient_withdraw.list().person.findAll{it.findAll {consentInstance?.person?.each{p -> it == p}}}.empty }">
     <a class='btn btn-primary btn-small' <g:link controller="patient_withdraw" action="create" params="['person': consentInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s withdrawal</g:link>
 </g:if>
 

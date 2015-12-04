@@ -50,18 +50,20 @@ class Patient_withdrawController {
 
     def listPersonsToBeWithdrawn() {
         List<Long> withdrawalList = Patient_withdraw.list().id
-        List<Person> person = new ArrayList<Person>()
+        List<Person> persons = new ArrayList<Person>()
         if (!withdrawalList.empty){
-            person = Person.createCriteria().list {
+            persons = Person.createCriteria().list {
                 interactions {
                     'in'("id",withdrawalList)
                 }
             }
         }
-        def personsToBeWithdrawnList = Consent.list()
-        if (!person.empty) {
-            personsToBeWithdrawnList = Consent.findAllByPersonNotInList(person)        }
-        [personsToBeWithdrawnList: personsToBeWithdrawnList, personsToBeWithdrawnTotal: personsToBeWithdrawnList.size()]
+        if (!persons.empty){
+            def personsToBeWithdrawnList = Consent.createCriteria().list { not {person {'in'("id",persons.id)}}}
+            [personsToBeWithdrawnList: personsToBeWithdrawnList, personsToBeWithdrawnTotal: personsToBeWithdrawnList.size()]
+        }else {
+            [personsToBeWithdrawnList: Consent.list(), personsToBeWithdrawnTotal: Consent.count()]
+        }
     }
 
     @Transactional

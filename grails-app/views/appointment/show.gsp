@@ -31,7 +31,6 @@
 						<span>${a.toString()} </br></span>
 					</g:each>
 				</td>
-				%{--<td valign="top" class="value"><g:link controller="person" action="show" id="${appointmentInstance?.person?.find{it?.id}}">${appointmentInstance?.person?.find{it?.id}}</g:link></td>--}%
 
 			</tr>
 		
@@ -102,17 +101,16 @@
 <hr/>
 
 <p class="text-primary">Available Action</p>
-
-<g:if test="${PreConsent.Engage.list().person.findAll{it.findAll {it == appointmentInstance?.person}}.empty }">
-	<a class='btn btn-primary btn-small' <g:link controller="engage" action="create" params="['person.id': appointmentInstance?.person?.id, 'clinician.id': appointmentInstance?.clinician?.id, 'date': appointmentInstance?.date]"><i class="glyphicon glyphicon-plus"></i> Engage this patient</g:link>
+<g:if test="${PreConsent.Engage.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}}.empty }">
+	<a class='btn btn-primary btn-small' <g:link controller="engage" action="create" params="['person': appointmentInstance?.person?.id, 'clinician.id': appointmentInstance?.clinician?.id, 'date': appointmentInstance?.date]"><i class="glyphicon glyphicon-plus"></i> Engage this patient</g:link>
 </g:if>
 
-<g:if test="${PreConsent.Engage.list().person.findAll{it.findAll {it == appointmentInstance?.person}} && PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {it == appointmentInstance?.person}}.empty && PreConsent.Consent.list().person.findAll{it.findAll {it == appointmentInstance?.person}}.empty}">
-	<a class='btn btn-primary btn-small' <g:link controller="consent" action="create" params="['person.id': appointmentInstance?.person?.id, 'clinician.id': appointmentInstance?.clinician?.id, 'date': appointmentInstance?.date]"><i class="glyphicon glyphicon-plus"></i> Consent this patient</g:link>
+<g:if test="${PreConsent.Engage.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}} && PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}}.empty && PreConsent.Consent.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}}.empty}">
+	<a class='btn btn-primary btn-small' <g:link controller="consent" action="create" params="['person': appointmentInstance?.person?.id, 'clinician.id': appointmentInstance?.clinician?.id, 'date': appointmentInstance?.date]"><i class="glyphicon glyphicon-plus"></i> Consent this patient</g:link>
 </g:if>
 
-<g:if test="${PreConsent.Consent.list().person.findAll{it.findAll {it == appointmentInstance?.person}} && PreConsent.Patient_withdraw.list().person.findAll{it.findAll {it == appointmentInstance?.person}}.empty}">
-	<a class='btn btn-primary btn-small' <g:link controller="patient_withdraw" action="create" params="['person.id': appointmentInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s withdrawal</g:link>
+<g:if test="${PreConsent.Consent.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}} && PreConsent.Patient_withdraw.list().person.findAll{it.findAll {appointmentInstance?.person?.each{p -> it == p}}}.empty}">
+	<a class='btn btn-primary btn-small' <g:link controller="patient_withdraw" action="create" params="['person': appointmentInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s withdrawal</g:link>
 </g:if>
 
 <g:if test="${appointmentInstance?.status?.id == PreConsent.AppointmentStatus.findByAppointmentStatusName('Rescheduled')?.id}">

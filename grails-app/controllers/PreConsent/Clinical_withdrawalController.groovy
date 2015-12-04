@@ -52,19 +52,20 @@ class Clinical_withdrawalController {
         List<Long> consentList = Consent.list().id
         List<Long> clinicalWithdrawalList = Clinical_withdrawal.list().id
         clinicalWithdrawalList.addAll(consentList)
-        List<Person> person = new ArrayList<Person>()
+        List<Person> persons = new ArrayList<Person>()
         if (!clinicalWithdrawalList.empty){
-            person = Person.createCriteria().list {
+            persons = Person.createCriteria().list {
                 interactions {
                     'in'("id",clinicalWithdrawalList)
                 }
             }
         }
-        def engagedNotClinicalWithdrawn = Engage.list()
-        if (!person.empty) {
-            engagedNotClinicalWithdrawn = Engage.findAllByPersonNotInList(person)
+        if (!persons.empty){
+            def engagedNotClinicalWithdrawn = Engage.createCriteria().list { not {person {'in'("id",persons.id)}}}
+            [personsToBeClinicalWithdrawnList: engagedNotClinicalWithdrawn, personsToBeClinicalWithdrawnTotal: engagedNotClinicalWithdrawn.size()]
+        }else {
+            [personsToBeClinicalWithdrawnList: Engage.list(), personsToBeClinicalWithdrawnTotal: Engage.count()]
         }
-        [personsToBeClinicalWithdrawnList: engagedNotClinicalWithdrawn, personsToBeClinicalWithdrawnTotal: engagedNotClinicalWithdrawn.size()]
     }
 
     @Transactional

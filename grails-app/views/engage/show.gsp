@@ -65,11 +65,11 @@
 
 <p class="text-primary">Available Actions</p>
 
-<g:if test="${PreConsent.Consent.list().person.findAll{it.findAll {it == engageInstance?.person}}.empty && PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {it == engageInstance?.person}}.empty}">
+<g:if test="${PreConsent.Consent.list().person.findAll{it.findAll {engageInstance?.person?.each{p -> it == p}}}.empty && PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {engageInstance?.person?.each{p -> it == p}}}.empty}">
     <a class='btn btn-primary btn-small' <g:link controller="consent" action="create" params="['person': engageInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Record this patient’s consent</g:link>
 </g:if>
 
-<g:if test="${PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {it == engageInstance?.person}}.empty && PreConsent.Consent.list().person.findAll{it.findAll {it == engageInstance?.person}}.empty}">
+<g:if test="${PreConsent.Clinical_withdrawal.list().person.findAll{it.findAll {engageInstance?.person?.each{p -> it == p}}}.empty && PreConsent.Consent.list().person.findAll{it.findAll {engageInstance?.person?.each{p -> it == p}}}.empty}">
     <a class='btn btn-primary btn-small' <g:link controller="clinical_withdrawal" action="create" params="['person': engageInstance?.person?.id]"><i class="glyphicon glyphicon-plus"></i> Withdraw patient for clinical reasons</g:link>
 </g:if>
 
